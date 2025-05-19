@@ -10,9 +10,10 @@ This project demonstrates a real-time IoT monitoring system built as a personal 
 
 ## 🛠 Tech Stack
 
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB Atlas (or InfluxDB for time-series data)
-- **Data Simulation:** Node.js with Faker.js, MQTT/WebSocket
+- **Backend:** Python (FastAPI)
+- **Frontend:** React
+- **Database:** SQLite
+- **Data Simulation:** N/A (yet)
 - **Visualization:** Power BI (Desktop)
 - **APIs:** RESTful JSON endpoints
 
