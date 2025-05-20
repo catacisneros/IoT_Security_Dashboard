@@ -1,8 +1,12 @@
-# main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from threading import Thread
+import time, random
+from faker import Faker
 
 app = FastAPI()
+
+# Allow frontend (React) to access backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -11,22 +15,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/metrics")
-def get_metrics():
-    return {"incidents": 24, "vulnerabilities": 123, "alerts": 5}
+fake = Faker()
+devices = []
 
-@app.get("/device-types")
-def get_device_types():
-    return {"Cameras": 35, "Industrial": 25, "Router": 20, "Other": 20}
+# Generate initial fake devices
 
-@app.get("/incidents")
-def get_incident_trend():
-    return [2, 4, 3, 6, 5, 11, 9]
+for _ in range(20):
+    devices.append({
+        "name": fake.word().capitalize(),
+        "ip": fake.ipv4_private(),
+        "status": random.choice(["secure", "vulnerable", "offline"]),
+        "type": random.choice(["Camera", "Router", "Thermostat"]),
+        "last_seen": fake.date_time_between(start_date="-7d", end_date="now").isoformat()
+    })
 
+
+# Background thread to update device statuses
+def simulate_updates():
+    while True:
+        time.sleep(5)
+        for device in devices:
+            device["status"] = random.choice(["secure", "vulnerable", "offline"])
+            device["last_seen"] = fake.date_time_between(start_date="-7d", end_date="now").isoformat()
+
+
+@app.on_event("startup")
+def start_simulation():
+    Thread(target=simulate_updates, daemon=True).start()
+
+# API endpoint for devices
 @app.get("/devices")
 def get_devices():
-    return {"secure": 1250, "vulnerable": 86, "offline": 12}
+    return devices
 
+# Optional: fake alert data (same idea)
 @app.get("/alerts")
 def get_alerts():
     return [
