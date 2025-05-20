@@ -1,35 +1,37 @@
+# main.py
 from fastapi import FastAPI
-from sqlmodel import Field, SQLModel, create_engine, Session, select
-from typing import Optional, List
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Define the Device table
-class Device(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
-    ip: str
-    location: str
+@app.get("/metrics")
+def get_metrics():
+    return {"incidents": 24, "vulnerabilities": 123, "alerts": 5}
 
-# Create database engine
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-engine = create_engine(sqlite_url, echo=True)
+@app.get("/device-types")
+def get_device_types():
+    return {"Cameras": 35, "Industrial": 25, "Router": 20, "Other": 20}
 
-# Create the table if not exists
-SQLModel.metadata.create_all(engine)
+@app.get("/incidents")
+def get_incident_trend():
+    return [2, 4, 3, 6, 5, 11, 9]
 
-# Routes
+@app.get("/devices")
+def get_devices():
+    return {"secure": 1250, "vulnerable": 86, "offline": 12}
 
-@app.post("/devices")
-def create_device(device: Device):
-    with Session(engine) as session:
-        session.add(device)
-        session.commit()
-        session.refresh(device)
-        return device
-
-@app.get("/devices", response_model=List[Device])
-def read_devices():
-    with Session(engine) as session:
-        return session.exec(select(Device)).all()
+@app.get("/alerts")
+def get_alerts():
+    return [
+        {"type": "Malware Infection", "risk": "HIGH", "device": "Camera 032", "time": "Today, 11:30"},
+        {"type": "Vulnerability Detected", "risk": "MEDIUM", "device": "Router 12", "time": "Today, 09:15"},
+        {"type": "Unauthorized Access", "risk": "HIGH", "device": "Sensor 07", "time": "Yesterday, 17:20"},
+        {"type": "Failed Login Attempt", "risk": "LOW", "device": "Thermostat 2", "time": "Yesterday, 06:45"},
+    ]
