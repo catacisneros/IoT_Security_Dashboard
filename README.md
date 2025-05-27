@@ -1,42 +1,11 @@
 # 🔐 IoT Security Dashboard
 
-A real-time dashboard for monitoring and securing IoT devices using **Node.js**, **Power BI**, and simulated data streams.
+IoT Security Dashboard
 
-## 🚀 Project Overview
+This project is a real-time dashboard to track and monitor IoT devices. It shows device status, security alerts, and analytics like charts and tables.
 
-This project demonstrates a real-time IoT monitoring system built as a personal portfolio project. It simulates IoT device behavior, identifies potential security events, and visualizes key metrics in Power BI.
+## 📁 Project Structure
+iot-dashboard/: React frontend (the dashboard you see in the browser)
+Main.py: FastAPI backend (simulates fake devices with real-time updates)
 
----
-
-## 🛠 Tech Stack
-
-- **Backend:** Python (FastAPI)
-- **Frontend:** React
-- **Database:** SQLite
-- **Data Simulation:** N/A (yet)
-- **Visualization:** Power BI (Desktop)
-- **APIs:** RESTful JSON endpoints
-
----
-
-## 📊 Features
-
-- Real-time device status updates (Online/Offline)
-- Threat simulations (e.g., DDoS, rogue device behavior)
-
-
-## 🧠 What I expect to Learn
-
-- Integrating simulated data into live dashboards
-- RESTful API design for IoT-style services
-- Power BI dashboard building and API data imports
-- Real-time data simulation and streaming
-
----
-
-## 📌 Future Improvements????
-
-- Real integration with MQTT brokers or IoT platforms (e.g., AWS IoT)
-- Notification system (email/SMS on alerts)
-- User authentication and role-based access
-
+**👩🏻‍💻Still work in progress**
