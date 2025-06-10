@@ -17,6 +17,7 @@ app.add_middleware(
 
 fake = Faker()
 devices = []
+MAX_DEVICES = 100
 
 # Generate initial fake devices
 
@@ -34,9 +35,19 @@ for _ in range(20):
 def simulate_updates():
     while True:
         time.sleep(5)
+        # Update statuses of existing devices
         for device in devices:
             device["status"] = random.choice(["secure", "vulnerable", "offline"])
             device["last_seen"] = fake.date_time_between(start_date="-7d", end_date="now").isoformat()
+        # Add a new fake device each cycle
+        if len(devices) < MAX_DEVICES:
+            devices.append({
+                "name": fake.word().capitalize(),
+                "ip": fake.ipv4_private(),
+                "status": random.choice(["secure", "vulnerable", "offline"]),
+                "type": random.choice(["Camera", "Router", "Thermostat", "Sensor", "Light", "Speaker"]),
+                "last_seen": fake.date_time_between(start_date="-7d", end_date="now").isoformat()
+            })
 
 
 @app.on_event("startup")
