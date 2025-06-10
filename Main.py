@@ -57,3 +57,30 @@ def get_alerts():
         {"type": "Unauthorized Access", "risk": "HIGH", "device": "Sensor 07", "time": "Yesterday, 17:20"},
         {"type": "Failed Login Attempt", "risk": "LOW", "device": "Thermostat 2", "time": "Yesterday, 06:45"},
     ]
+
+@app.get("/metrics")
+def get_metrics():
+    # Example metrics, adjust as needed
+    secure = sum(1 for d in devices if d["status"] == "secure")
+    vulnerable = sum(1 for d in devices if d["status"] == "vulnerable")
+    offline = sum(1 for d in devices if d["status"] == "offline")
+    return {
+        "incidents": 7,  # Example static value
+        "vulnerabilities": vulnerable,
+        "alerts": 4,  # Example static value
+        "secure": secure,
+        "offline": offline
+    }
+
+@app.get("/device-types")
+def get_device_types():
+    types = {}
+    for d in devices:
+        t = d["type"]
+        types[t] = types.get(t, 0) + 1
+    return types
+
+@app.get("/incidents")
+def get_incidents():
+    # Example: return a list of incident counts for a week
+    return [random.randint(0, 5) for _ in range(7)]
